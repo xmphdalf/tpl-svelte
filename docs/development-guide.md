@@ -14,10 +14,10 @@ Add to `src/lib/server/db/schema.ts`:
 import { pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const posts = pgTable('posts', {
-  id: serial('id').primaryKey(),
-  title: text('title').notNull(),
-  content: text('content').notNull(),
-  createdAt: timestamp('created_at').defaultNow()
+	id: serial('id').primaryKey(),
+	title: text('title').notNull(),
+	content: text('content').notNull(),
+	createdAt: timestamp('created_at').defaultNow()
 });
 ```
 
@@ -36,11 +36,11 @@ import { posts } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 
 export async function getPosts() {
-  return await db.select().from(posts).orderBy(posts.createdAt);
+	return await db.select().from(posts).orderBy(posts.createdAt);
 }
 
 export async function createPost({ title, content }: { title: string; content: string }) {
-  return await db.insert(posts).values({ title, content }).returning();
+	return await db.insert(posts).values({ title, content }).returning();
 }
 ```
 
@@ -53,14 +53,14 @@ import { json } from '@sveltejs/kit';
 import * as posts from '$lib/server/posts';
 
 export async function GET() {
-  const allPosts = await posts.getPosts();
-  return json(allPosts);
+	const allPosts = await posts.getPosts();
+	return json(allPosts);
 }
 
 export async function POST({ request }) {
-  const data = await request.json();
-  const newPost = await posts.createPost(data);
-  return json(newPost);
+	const data = await request.json();
+	const newPost = await posts.createPost(data);
+	return json(newPost);
 }
 ```
 
@@ -70,15 +70,15 @@ Create a reusable component in `src/lib/components/PostCard.svelte`:
 
 ```svelte
 <script lang="ts">
-  export let title: string;
-  export let content: string;
-  export let createdAt: Date;
+	export let title: string;
+	export let content: string;
+	export let createdAt: Date;
 </script>
 
 <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow">
-  <h2 class="text-xl font-bold">{title}</h2>
-  <p class="mt-2 text-gray-600 dark:text-gray-300">{content}</p>
-  <time class="text-sm text-gray-500">{new Date(createdAt).toLocaleDateString()}</time>
+	<h2 class="text-xl font-bold">{title}</h2>
+	<p class="mt-2 text-gray-600 dark:text-gray-300">{content}</p>
+	<time class="text-sm text-gray-500">{new Date(createdAt).toLocaleDateString()}</time>
 </div>
 ```
 
@@ -88,9 +88,9 @@ Create `src/routes/posts/+page.ts`:
 
 ```typescript
 export const load = async ({ fetch }) => {
-  const response = await fetch('/api/posts');
-  const posts = await response.json();
-  return { posts };
+	const response = await fetch('/api/posts');
+	const posts = await response.json();
+	return { posts };
 };
 ```
 
@@ -98,53 +98,53 @@ Create `src/routes/posts/+page.svelte`:
 
 ```svelte
 <script lang="ts">
-  import PostCard from '$lib/components/PostCard.svelte';
-  
-  export let data;
-  
-  let title = '';
-  let content = '';
-  
-  async function handleSubmit() {
-    const response = await fetch('/api/posts', {
-      method: 'POST',
-      body: JSON.stringify({ title, content }),
-      headers: { 'Content-Type': 'application/json' }
-    });
-    
-    if (response.ok) {
-      title = '';
-      content = '';
-      invalidateAll();
-    }
-  }
+	import PostCard from '$lib/components/PostCard.svelte';
+
+	export let data;
+
+	let title = '';
+	let content = '';
+
+	async function handleSubmit() {
+		const response = await fetch('/api/posts', {
+			method: 'POST',
+			body: JSON.stringify({ title, content }),
+			headers: { 'Content-Type': 'application/json' }
+		});
+
+		if (response.ok) {
+			title = '';
+			content = '';
+			invalidateAll();
+		}
+	}
 </script>
 
 <div class="max-w-4xl mx-auto p-4">
-  <form on:submit|preventDefault={handleSubmit} class="mb-8 space-y-4">
-    <input
-      bind:value={title}
-      placeholder="Post title"
-      class="w-full p-2 rounded border dark:bg-gray-800"
-    />
-    <textarea
-      bind:value={content}
-      placeholder="Post content"
-      class="w-full p-2 rounded border dark:bg-gray-800"
-    />
-    <button
-      type="submit"
-      class="px-4 py-2 bg-accent-500 text-white rounded hover:bg-accent-600"
-    >
-      Create Post
-    </button>
-  </form>
+	<form on:submit|preventDefault={handleSubmit} class="mb-8 space-y-4">
+		<input
+			bind:value={title}
+			placeholder="Post title"
+			class="w-full p-2 rounded border dark:bg-gray-800"
+		/>
+		<textarea
+			bind:value={content}
+			placeholder="Post content"
+			class="w-full p-2 rounded border dark:bg-gray-800"
+		/>
+		<button
+			type="submit"
+			class="px-4 py-2 bg-accent-500 text-white rounded hover:bg-accent-600"
+		>
+			Create Post
+		</button>
+	</form>
 
-  <div class="space-y-4">
-    {#each data.posts as post}
-      <PostCard {...post} />
-    {/each}
-  </div>
+	<div class="space-y-4">
+		{#each data.posts as post}
+			<PostCard {...post} />
+		{/each}
+	</div>
 </div>
 ```
 

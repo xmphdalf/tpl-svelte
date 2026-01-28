@@ -48,7 +48,7 @@
 	>
 		<span class="text-xl">
 			{#if isDark}
-					🌞
+				🌞
 			{:else}
 				🌙
 			{/if}
