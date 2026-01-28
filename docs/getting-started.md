@@ -11,36 +11,43 @@ This guide will help you set up your development environment and get the templat
 ## Installation
 
 1. Create a new project using this template:
-   ```bash
-   npm create svelte@latest my-app -- --template https://github.com/MihirLathiya510/tpl-svelte
-   cd my-app
-   ```
+
+    ```bash
+    npm create svelte@latest my-app -- --template https://github.com/MihirLathiya510/tpl-svelte
+    cd my-app
+    ```
 
 2. Install dependencies:
-   ```bash
-   npm install
-   ```
+
+    ```bash
+    npm install
+    ```
 
 3. Set up environment variables:
-   ```bash
-   cp .env.example .env
-   ```
-   Edit `.env` with your database credentials if needed.
+
+    ```bash
+    cp .env.example .env
+    ```
+
+    Edit `.env` with your database credentials if needed.
 
 4. Start the PostgreSQL database:
-   ```bash
-   npm run db:start
-   ```
+
+    ```bash
+    npm run db:start
+    ```
 
 5. Push the database schema:
-   ```bash
-   npm run db:push
-   ```
+
+    ```bash
+    npm run db:push
+    ```
 
 6. Start the development server:
-   ```bash
-   npm run dev
-   ```
+
+    ```bash
+    npm run dev
+    ```
 
 ## Project Structure
 

@@ -21,18 +21,18 @@ import { render, screen } from '@testing-library/svelte';
 import PostCard from './PostCard.svelte';
 
 describe('PostCard', () => {
-  const mockPost = {
-    title: 'Test Post',
-    content: 'Test Content',
-    createdAt: new Date().toISOString()
-  };
+	const mockPost = {
+		title: 'Test Post',
+		content: 'Test Content',
+		createdAt: new Date().toISOString()
+	};
 
-  it('renders post details correctly', () => {
-    render(PostCard, { props: mockPost });
-    
-    expect(screen.getByText(mockPost.title)).toBeInTheDocument();
-    expect(screen.getByText(mockPost.content)).toBeInTheDocument();
-  });
+	it('renders post details correctly', () => {
+		render(PostCard, { props: mockPost });
+
+		expect(screen.getByText(mockPost.title)).toBeInTheDocument();
+		expect(screen.getByText(mockPost.content)).toBeInTheDocument();
+	});
 });
 ```
 
@@ -46,36 +46,36 @@ import { GET, POST } from './+server';
 import { db } from '$lib/server/db';
 
 describe('Posts API', () => {
-  beforeAll(async () => {
-    // Setup test database
-    await db.execute(sql`DELETE FROM posts`);
-  });
+	beforeAll(async () => {
+		// Setup test database
+		await db.execute(sql`DELETE FROM posts`);
+	});
 
-  it('GET returns all posts', async () => {
-    const response = await GET();
-    const data = await response.json();
-    
-    expect(response.status).toBe(200);
-    expect(Array.isArray(data)).toBe(true);
-  });
+	it('GET returns all posts', async () => {
+		const response = await GET();
+		const data = await response.json();
 
-  it('POST creates a new post', async () => {
-    const post = {
-      title: 'Test Post',
-      content: 'Test Content'
-    };
+		expect(response.status).toBe(200);
+		expect(Array.isArray(data)).toBe(true);
+	});
 
-    const response = await POST({
-      request: new Request('http://localhost', {
-        method: 'POST',
-        body: JSON.stringify(post)
-      })
-    });
+	it('POST creates a new post', async () => {
+		const post = {
+			title: 'Test Post',
+			content: 'Test Content'
+		};
 
-    const data = await response.json();
-    expect(response.status).toBe(200);
-    expect(data.title).toBe(post.title);
-  });
+		const response = await POST({
+			request: new Request('http://localhost', {
+				method: 'POST',
+				body: JSON.stringify(post)
+			})
+		});
+
+		const data = await response.json();
+		expect(response.status).toBe(200);
+		expect(data.title).toBe(post.title);
+	});
 });
 ```
 
@@ -89,23 +89,23 @@ import { getPosts, createPost } from './posts';
 import { db } from './db';
 
 describe('Posts Database Operations', () => {
-  beforeEach(async () => {
-    // Clean database before each test
-    await db.execute(sql`TRUNCATE TABLE posts CASCADE`);
-  });
+	beforeEach(async () => {
+		// Clean database before each test
+		await db.execute(sql`TRUNCATE TABLE posts CASCADE`);
+	});
 
-  it('creates and retrieves posts', async () => {
-    const post = await createPost({
-      title: 'Test Post',
-      content: 'Test Content'
-    });
+	it('creates and retrieves posts', async () => {
+		const post = await createPost({
+			title: 'Test Post',
+			content: 'Test Content'
+		});
 
-    expect(post[0].title).toBe('Test Post');
+		expect(post[0].title).toBe('Test Post');
 
-    const posts = await getPosts();
-    expect(posts).toHaveLength(1);
-    expect(posts[0].title).toBe('Test Post');
-  });
+		const posts = await getPosts();
+		expect(posts).toHaveLength(1);
+		expect(posts[0].title).toBe('Test Post');
+	});
 });
 ```
 

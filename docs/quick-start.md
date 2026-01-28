@@ -25,10 +25,10 @@ npm run db:start
 import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
-  id: text('id').primaryKey(),
-  email: text('email').notNull().unique(),
-  name: text('name'),
-  createdAt: timestamp('created_at').defaultNow()
+	id: text('id').primaryKey(),
+	email: text('email').notNull().unique(),
+	name: text('name'),
+	createdAt: timestamp('created_at').defaultNow()
 });
 ```
 
@@ -40,12 +40,12 @@ Example protected route:
 import { json } from '@sveltejs/kit';
 
 export async function GET({ locals }) {
-  // Check auth status
-  if (!locals.user) {
-    return new Response('Unauthorized', { status: 401 });
-  }
-  
-  return json({ message: 'Protected data' });
+	// Check auth status
+	if (!locals.user) {
+		return new Response('Unauthorized', { status: 401 });
+	}
+
+	return json({ message: 'Protected data' });
 }
 ```
 
@@ -54,15 +54,15 @@ export async function GET({ locals }) {
 ```svelte
 <!-- src/routes/+page.svelte -->
 <script lang="ts">
-  import { user } from '$lib/stores/auth';
+	import { user } from '$lib/stores/auth';
 </script>
 
 <div class="container mx-auto p-4">
-  {#if $user}
-    <h1>Welcome, {$user.name}!</h1>
-  {:else}
-    <a href="/login" class="btn">Login</a>
-  {/if}
+	{#if $user}
+		<h1>Welcome, {$user.name}!</h1>
+	{:else}
+		<a href="/login" class="btn">Login</a>
+	{/if}
 </div>
 ```
 
@@ -72,28 +72,28 @@ export async function GET({ locals }) {
 ```typescript
 // src/routes/blog/+page.ts
 export const load = async ({ fetch }) => {
-  const posts = await fetch('/api/posts').then(r => r.json());
-  return { posts };
+	const posts = await fetch('/api/posts').then((r) => r.json());
+	return { posts };
 };
 ```
 
 ### 2. Form Handling
 ```svelte
 <script lang="ts">
-  async function handleSubmit(event: SubmitEvent) {
-    const formData = new FormData(event.target as HTMLFormElement);
-    const response = await fetch('/api/submit', {
-      method: 'POST',
-      body: formData
-    });
-    if (response.ok) {
-      // Handle success
-    }
-  }
+	async function handleSubmit(event: SubmitEvent) {
+		const formData = new FormData(event.target as HTMLFormElement);
+		const response = await fetch('/api/submit', {
+			method: 'POST',
+			body: formData
+		});
+		if (response.ok) {
+			// Handle success
+		}
+	}
 </script>
 
 <form on:submit|preventDefault={handleSubmit}>
-  <!-- Form fields -->
+	<!-- Form fields -->
 </form>
 ```
 
@@ -101,9 +101,9 @@ export const load = async ({ fetch }) => {
 ```typescript
 // src/hooks.server.ts
 export const handle = async ({ event, resolve }) => {
-  const session = await getSession(event);
-  event.locals.user = session?.user;
-  return resolve(event);
+	const session = await getSession(event);
+	event.locals.user = session?.user;
+	return resolve(event);
 };
 ```
 
